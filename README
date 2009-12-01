@@ -1,0 +1,50 @@
+System Lock
+===========
+
+System Lock is a system-wide critical section for ruby code.  This works across multiple mongrel/thin instances 
+across multiple servers.  This also works with recursive calls to the lock by using reference counting.  The
+information required for the lock is stored in memcached.
+
+Requirements
+============
+
+Memcached
+memcache-client gem
+
+
+What you need to know
+====================
+
+1) Set this at the bottom of your environment.rb - after you initialize memcached.  CACHE is the instance of
+memcache-client e.g. "CACHE = MemCache.new(servers)"
+
+  Internaut::SystemLock.memcached_instance CACHE
+  
+2) Setup your lock around the code you want to protect.  The unique identifier should be something that identifies
+not only the code block, but in which cases you want it to be protected.  For example, in this case I am using
+something that looks like a route or url.  I want to protect this code block for all users trying to access
+project id 152.
+
+  Internaut::SystemLock.critical_section('/projects/152') do
+    # any code that you execute in here will be serialized as long 
+    # as it has the same unique code block identifier
+  end
+
+API
+===
+Internaut::SystemLock.memcached_instance(MEMCACHED_INSTANCE)
+
+Internaut::SystemLock.critical_section(unique_code_block_identifier, timeout=60) 
+  # Timeout default 60 seconds.  Set it higher than you need it to be.
+
+Internaut::SystemLock.disable!
+Internaut::SystemLock.enable! (enabled by default)
+Internaut::SystemLock.enabled?
+
+
+Information stored in Memcached
+===============================
+unique_code_block_identifier => [ process_id + unique_server_id_string, reference_count ]
+
+
+Copyright (c) 2009 Rodney Carvalho, released under the MIT license
