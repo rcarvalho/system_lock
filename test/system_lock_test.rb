@@ -3,7 +3,7 @@ require 'rubygems'
 require 'memcache'
 require "#{File.dirname(__FILE__)}/../init"
 
-Internaut::SystemLock.set_memcached_instance MemCache.new(["127.0.0.1:11211"])
+Internaut::SystemLock.memcached_instance = MemCache.new(["127.0.0.1:11211"])
 
 class SystemLockTest < Test::Unit::TestCase
   

@@ -6,15 +6,15 @@ module Internaut
       if val = result
         value = "#{val},#{value}"
       end
-      SystemLock.get_memcached_instance.set @@path, value, 60.seconds.to_i
+      SystemLock.memcached_instance.set @@path, value, 60.seconds.to_i
     end
 
     def self.result
-      SystemLock.get_memcached_instance.get(@@path)
+      SystemLock.memcached_instance.get(@@path)
     end
     
     def self.clear
-      SystemLock.get_memcached_instance.set @@path, nil
+      SystemLock.memcached_instance.set @@path, nil
     end
   end
 
