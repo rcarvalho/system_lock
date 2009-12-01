@@ -1,1 +1,1 @@
-require 'lib/system_lock'
+require "#{File.dirname(__FILE__)}/lib/system_lock"

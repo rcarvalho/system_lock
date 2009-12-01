@@ -18,7 +18,7 @@ What you need to know
 1) Set this at the bottom of your environment.rb - after you initialize memcached.  CACHE is the instance of
 memcache-client e.g. "CACHE = MemCache.new(servers)"
 
-  Internaut::SystemLock.memcached_instance CACHE
+  Internaut::SystemLock.memcached_instance = CACHE
   
 2) Setup your lock around the code you want to protect.  The unique identifier should be something that identifies
 not only the code block, but in which cases you want it to be protected.  For example, in this case I am using
