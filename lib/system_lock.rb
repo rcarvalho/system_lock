@@ -65,11 +65,12 @@ module Internaut
           set_lock_to = [unique_process_id,counter]
           # puts "attempting to grab lock: #{set_lock_to.inspect}"
           @@CACHE.set( path, set_lock_to, timeout.seconds.to_i )
-          if @@CACHE.get(path)[0] == unique_process_id
+          cache = @@CACHE.get(path)
+          if cache && (cache[0] == unique_process_id)
             # we have to double check to make sure we actually got the lock
             # sleep(0.1)
             cache = @@CACHE.get(path)
-            if cache[0] == unique_process_id
+            if cache && (cache[0] == unique_process_id)
               # puts "got the lock"
               got_the_lock = true
               
