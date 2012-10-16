@@ -8,17 +8,20 @@ information required for the lock is stored in memcached.
 Requirements
 ============
 
-Memcached
-memcache-client gem
-
+Memcached Server
+Dalli Gem
 
 What you need to know
 ====================
 
-1) Set this at the bottom of your environment.rb - after you initialize memcached.  CACHE is the instance of
-memcache-client e.g. "CACHE = MemCache.new(servers)"
+1) Set this after you initialize memcached.  CACHE is the instance of
+DALLI e.g. "CACHE = Dalli::Client.new(SERVER_LIST, {:username = "XXXXXX", :password => "XXXXXX"})"
 
   Internaut::SystemLock.memcached_instance = CACHE
+
+If you are in Rails you can use the following in your environment.rb:
+	
+  Internaut::SystemLock.memcached_instance = Rails.cache
   
 2) Setup your lock around the code you want to protect.  The unique identifier should be something that identifies
 not only the code block, but in which cases you want it to be protected.  For example, in this case I am using
